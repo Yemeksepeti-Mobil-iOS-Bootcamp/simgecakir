@@ -35,7 +35,7 @@ extension ViewController: UITableViewDataSource{
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isFiltering {
-            filteredUsers.count == 0 ? self.tableView.setEmptyMessage("User not Found") : self.tableView.restore()
+            filteredUsers.count == 0 ? self.tableView.setEmptyMessage("Person not Found", image: UIImage(systemName: "person.2")!) : self.tableView.restore()
             return filteredUsers.count
         }
         return users.count
@@ -80,16 +80,37 @@ extension ViewController: UISearchBarDelegate{
 
 extension UITableView {
     
-    func setEmptyMessage(_ message: String) {
-        let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height))
+    func setEmptyMessage(_ message: String, image: UIImage){
+        
+        let containerView = UIView(frame: CGRect(x: self.center.x, y: self.center.y, width: self.bounds.width, height: self.bounds.height))
+        
+        let imageView = UIImageView()
+        imageView.image = image
+        
+        let messageLabel = UILabel()
         messageLabel.text = message
         messageLabel.textColor = .black
         messageLabel.numberOfLines = 0
         messageLabel.textAlignment = .center
         messageLabel.font = UIFont(name: "arial-boldmt", size: 25)
         messageLabel.sizeToFit()
+        
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
 
-        self.backgroundView = messageLabel
+        containerView.addSubview(imageView)
+        imageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 200).isActive = true
+        imageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 150).isActive = true
+        
+        containerView.addSubview(messageLabel)
+        messageLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 25).isActive = true
+        messageLabel.widthAnchor.constraint(equalTo: containerView.widthAnchor).isActive = true
+        messageLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
+
+        
+        self.backgroundView = containerView
         self.separatorStyle = .none
     }
 
